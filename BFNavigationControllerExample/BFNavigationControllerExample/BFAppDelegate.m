@@ -42,7 +42,7 @@
     BOOL animated = [(NSButton *)[subviews objectAtIndex: [subviews count] - 1] state];
     
     TestViewController *controller = [[TestViewController alloc] initWithNibName: @"TestViewController" bundle: nil];
-    [controller setTitle: [NSString stringWithFormat: @"View Controller #%i", [_navigationController.viewControllers count] + 1]];
+    [controller setTitle: [NSString stringWithFormat: @"View Controller #%lu", [_navigationController.viewControllers count] + 1]];
     NSColor *color = [NSColor colorWithCalibratedRed:(arc4random() % 255) / 255.0 green:(arc4random() % 255) / 255.0 blue:(arc4random() % 255) / 255.0 alpha: 1.0];
     [((TestView *)controller.view) setBackgroundColor: color];
     

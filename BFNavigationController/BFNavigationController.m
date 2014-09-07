@@ -7,9 +7,8 @@
 
 #import "BFNavigationController.h"
 #import "BFViewController.h"
-#import "NSView+BFUtilities.h"
 
-static const CGFloat kPushPopAnimationDuration = 0.2;
+static const CGFloat kPushPopAnimationDuration = 0.25;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -170,43 +169,25 @@ static const CGFloat kPushPopAnimationDuration = 0.2;
             [(id<BFViewController>)lastController viewDidDisappear: animated];
     };
     
-    if(animated)
+    if (animated)
     {
         newControllerStartFrame.origin.x = push ? newControllerStartFrame.size.width : -newControllerStartFrame.size.width;
         lastControllerEndFrame.origin.x = push ? -lastControllerEndFrame.size.width : lastControllerEndFrame.size.width;
         
         // Assign start frame
         newController.view.frame = newControllerStartFrame;
-        
-        // Remove last controller from superview
-        [lastController.view removeFromSuperview];
-        
-        // We use NSImageViews to cache animating views. Of course we could animate using Core Animation layers - Do it if you like that.
-        NSImageView *lastControllerImageView = [[NSImageView alloc] initWithFrame: self.view.bounds];
-        NSImageView *newControllerImageView = [[NSImageView alloc] initWithFrame: newControllerStartFrame];
-        
-        [lastControllerImageView setImage: [lastController.view flattenWithSubviews]];
-        [newControllerImageView setImage: [newController.view flattenWithSubviews]];
-        
-        [self.view addSubview: lastControllerImageView];
-        [self.view addSubview: newControllerImageView];
+        [self.view addSubview:newController.view];
         
         // Animation 'block' - Using default timing function
-        [NSAnimationContext beginGrouping];
-        [[NSAnimationContext currentContext] setDuration: kPushPopAnimationDuration];
-        [[lastControllerImageView animator] setFrame: lastControllerEndFrame];
-        [[newControllerImageView animator] setFrame: self.view.bounds];
-        [NSAnimationContext endGrouping];
-        
-        // Could have just called setCompletionHandler: on animation context if it was Lion only.
-        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, kPushPopAnimationDuration * NSEC_PER_SEC);
-        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-            
-            [lastControllerImageView removeFromSuperview];
-            [self.view replaceSubview: newControllerImageView with: newController.view];
+        [NSAnimationContext runAnimationGroup:^(NSAnimationContext *context) {
+            [[NSAnimationContext currentContext] setDuration: kPushPopAnimationDuration];
+            [[lastController.view animator] setFrame: lastControllerEndFrame];
+            [[newController.view animator] setFrame: self.view.bounds];
+        } completionHandler:^{
+            [lastController.view removeFromSuperview];
             newController.view.frame = self.view.bounds;
             navigationCompleted(animated);
-        });
+        }];
     }
     else
     {
@@ -257,7 +238,7 @@ static const CGFloat kPushPopAnimationDuration = 0.2;
     if([_viewControllers count] == 1)
         return [NSArray array];
     
-    NSViewController *rootController = [_viewControllers objectAtIndex: 0];
+    NSViewController *rootController = [_viewControllers firstObject];
     [_viewControllers removeObject: rootController];
     NSArray *dispControllers = [NSArray arrayWithArray: _viewControllers];
     _viewControllers = [NSMutableArray arrayWithObject: rootController];

@@ -2,6 +2,8 @@
 
 This is basically an approach to bring the popular UINavigationController to Mac OS X.
 
+This version is a fork of the original that implements animated views instead of view flattening. If for example your view would like to make an animation before it dissapears or an animation while it's appearing in, then you now have the option to do so.
+
 ---
 
 ### Installation
