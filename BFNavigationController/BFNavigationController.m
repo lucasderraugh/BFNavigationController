@@ -41,6 +41,12 @@ static const CGFloat kPushPopAnimationDuration = 0.25;
     return [self initWithFrame: NSZeroRect rootViewController: nil];
 }
 
+//////////////////////////////////////////////////////////////////////////////////////
+- (id)initWithCoder:(NSCoder *)decoder {
+    
+    return [self initWithFrame: NSZeroRect rootViewController: nil];
+}
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 -(id)initWithFrame: (NSRect)aFrame rootViewController: (NSViewController *)controller

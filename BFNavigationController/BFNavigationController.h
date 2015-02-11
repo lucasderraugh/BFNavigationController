@@ -15,17 +15,21 @@
 /// @name Customizing Behavior
 ///---------------------------------------------------------------------------------------
 
+@property (nonatomic, weak) BFNavigationController* navigationController;
+
 @optional
 
 /**
  *  Sent to the receiver just after the navigation controller displays a view controller’s view and navigation item properties.
  */
--(void)navigationController: (BFNavigationController *)navigationController didShowViewController: (NSViewController *)viewController animated: (BOOL)animated;
+-(void)navigationController: (BFNavigationController *)navigationController
+      didShowViewController: (NSViewController *)viewController animated: (BOOL)animated;
 
 /**
  *  Sent to the receiver just before the navigation controller displays a view controller’s view and navigation item properties.
  */
--(void)navigationController: (BFNavigationController *)navigationController willShowViewController: (NSViewController *)viewController animated:(BOOL)animated;
+-(void)navigationController: (BFNavigationController *)navigationController
+     willShowViewController: (NSViewController *)viewController animated:(BOOL)animated;
 
 @end
 
@@ -96,7 +100,7 @@
 ///---------------------------------------------------------------------------------------
 
 /**
- *  The reciever's delegate or nil.
+ *  The receiver's delegate or nil.
  */
 @property (nonatomic, assign)id<BFNavigationControllerDelegate> delegate;
 
